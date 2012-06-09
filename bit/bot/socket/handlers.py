@@ -6,7 +6,7 @@ from twisted.python import log
 
 from bit.core.interfaces import ISockets
 from bit.bot.common.interfaces import ISubscriptions, IFlatten
-from bit.bot.http.events import SocketCreatedEvent,\
+from bit.bot.socket.events import SocketCreatedEvent,\
     SocketLostEvent, ClientAuthEvent
 
 

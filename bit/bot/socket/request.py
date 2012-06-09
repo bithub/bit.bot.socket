@@ -9,8 +9,8 @@ from twisted.python import log
 from bit.core.interfaces import ICommand
 from bit.bot.common.interfaces import IIntelligent, ISessions,\
     ISubscriptions, IMembers
-from bit.bot.http.events import ClientAuthEvent
-from bit.bot.http.interfaces import IHTTPSocketRequest
+from bit.bot.socket.events import ClientAuthEvent
+from bit.bot.socket.interfaces import IHTTPSocketRequest
 
 
 class SocketRequest(object):
@@ -26,14 +26,11 @@ class AuthRequest(SocketRequest):
         log.msg('bit.bot.http.request: AuthRequest.load: ',  sess.hex)
         kernel = getUtility(IIntelligent).bot
 
-        def _gotSession(sess):
-            kernel.setPredicate('secure', "yes", sess.jid)
-            kernel.setPredicate('name', personname, sess.jid)
-            self.proto.speak(sess.jid, 'welcome %s' % personname, anon_jid)
-            
-
-
-            #return getUtility(ISessions).activate(self.proto, sess)
+        def _gotSession(sess, anon_jid, person):
+            kernel.setPredicate('secure', "yes", sess.hex)
+            kernel.setPredicate('name', personname, sess.hex)
+            self.proto.speak(anon_jid, 'welcome %s' % personname, anon_jid)
+            return getUtility(ISessions).activate(self.proto, sess)
 
         def _gotPersonSessions(sessions, anon_jid, person):
             # there could be many, but we'll take the first one,
@@ -49,7 +46,7 @@ class AuthRequest(SocketRequest):
             session_id = '%s/%s' % (person.jid, session_id)
             getUtility(ISessions).add_session(
                 session_id=session_id, owner=person.jid, session_type='ws'
-                ).addCallback(_gotSession)
+                ).addCallback(_gotSession, anon_jid, person)
 
 
         def _gotThisSession(sessions, anon_jid, person):

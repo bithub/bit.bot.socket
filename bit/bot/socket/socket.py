@@ -12,7 +12,7 @@ from txws import WebSocketFactory
 
 from bit.bot.common.interfaces import ISessions, IBotSocket, ISocketRequest
 from bit.core.interfaces import ISockets
-from bit.bot.http.events import SocketCreatedEvent, SocketLostEvent
+from bit.bot.socket.events import SocketCreatedEvent, SocketLostEvent
 
 
 class BotSocketProtocol(StatefulProtocol):

@@ -5,7 +5,7 @@
       parent="bit.bot.http"
       name="ws"      
       service="twisted.application.internet.TCPServer"
-      port=".http.getWSPort"
+      port=".config.getWSPort"
       factory=".socket.WebBotSocketFactory"
       />
 
@@ -13,16 +13,16 @@
       parent="bit.bot.http"
       name="wss"      
       service="twisted.application.internet.SSLServer"
-      port=".https.getWSSPort"
+      port=".config.getWSSPort"
       factory=".socket.WebBotSocketFactory"
-      context=".https.SSLContextFactory"
+      context="bit.bot.http.https.SSLContextFactory"
       />
 
   <service
       parent="bit.bot.http"
       name="flash-policy"      
       service="twisted.application.internet.TCPServer"
-      port=".https.getFlashPolicyPort"
+      port=".config.getFlashPolicyPort"
       factory=".policy.FlashPolicyFactory"
       />
 
